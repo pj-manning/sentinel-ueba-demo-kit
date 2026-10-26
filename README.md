@@ -14,6 +14,7 @@ activity.
 | File | Purpose |
 |---|---|
 | `DEMO-PLAN.md` | Architecture, baseline timeline, deviations, and success criteria |
+| `IRM-Plan.md` | Beginner-oriented Purview Insider Risk Management extension |
 | `baseline-config.sample.json` | Tenant-neutral eight-persona configuration |
 | `setup-application.ps1` | Creates or reuses the public-client Entra application and writes the initial runtime configuration |
 | `validate-config.ps1` | Checks placeholders, GUIDs, personas, peer groups, recipients, and scenario limits |
@@ -283,4 +284,3 @@ production tenant.
   token caches and only while that account is signed in.
 - Use deterministic, entity-mapped analytics rules as a demo fallback; never
   describe those incidents as native UEBA anomalies.
-
