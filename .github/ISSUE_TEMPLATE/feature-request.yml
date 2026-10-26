@@ -1,0 +1,37 @@
+name: Feature request
+description: Propose a safe improvement to the demo kit
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or demo need
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Security, permission, cost, and cleanup impact
+      description: Explain any new scopes, data sources, Azure cost, or generated activity.
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Lab boundaries
+      options:
+        - label: The proposal uses synthetic identities and data.
+          required: true
+        - label: The proposal does not bypass MFA or Conditional Access.
+          required: true
+        - label: The proposal remains bounded, reversible, and non-destructive.
+          required: true
+

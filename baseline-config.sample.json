@@ -1,0 +1,126 @@
+{
+  "tenantId": "<TENANT_ID>",
+  "stateDirectory": "%LOCALAPPDATA%\\UEBA-Baseline",
+  "authentication": {
+    "clientId": "<PUBLIC_CLIENT_APP_ID>",
+    "scopes": [
+      "User.Read",
+      "Mail.Send",
+      "Calendars.ReadWrite",
+      "Files.ReadWrite"
+    ]
+  },
+  "peerGroupSchedules": [
+    {
+      "peerGroup": "Sales",
+      "weekdaysOnly": true,
+      "startHourLocal": 8,
+      "endHourLocal": 18
+    },
+    {
+      "peerGroup": "Finance",
+      "weekdaysOnly": true,
+      "startHourLocal": 9,
+      "endHourLocal": 16
+    },
+    {
+      "peerGroup": "Engineering",
+      "weekdaysOnly": true,
+      "startHourLocal": 7,
+      "endHourLocal": 19
+    }
+  ],
+  "users": [
+    {
+      "upn": "sales.user1@<TENANT_DOMAIN>",
+      "peerGroup": "Sales",
+      "mailRecipientUpn": "sales.user2@<TENANT_DOMAIN>",
+      "enabled": true
+    },
+    {
+      "upn": "sales.user2@<TENANT_DOMAIN>",
+      "peerGroup": "Sales",
+      "mailRecipientUpn": "sales.user3@<TENANT_DOMAIN>",
+      "enabled": true
+    },
+    {
+      "upn": "sales.user3@<TENANT_DOMAIN>",
+      "peerGroup": "Sales",
+      "mailRecipientUpn": "sales.user1@<TENANT_DOMAIN>",
+      "enabled": true
+    },
+    {
+      "upn": "finance.user1@<TENANT_DOMAIN>",
+      "peerGroup": "Finance",
+      "mailRecipientUpn": "finance.user2@<TENANT_DOMAIN>",
+      "enabled": true
+    },
+    {
+      "upn": "finance.user2@<TENANT_DOMAIN>",
+      "peerGroup": "Finance",
+      "mailRecipientUpn": "finance.user3@<TENANT_DOMAIN>",
+      "enabled": true
+    },
+    {
+      "upn": "finance.user3@<TENANT_DOMAIN>",
+      "peerGroup": "Finance",
+      "mailRecipientUpn": "finance.user1@<TENANT_DOMAIN>",
+      "enabled": true
+    },
+    {
+      "upn": "engineering.user1@<TENANT_DOMAIN>",
+      "peerGroup": "Engineering",
+      "mailRecipientUpn": "engineering.user2@<TENANT_DOMAIN>",
+      "enabled": true
+    },
+    {
+      "upn": "engineering.user2@<TENANT_DOMAIN>",
+      "peerGroup": "Engineering",
+      "mailRecipientUpn": "engineering.user1@<TENANT_DOMAIN>",
+      "enabled": true
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "profile-read",
+      "type": "profile-read",
+      "peerGroups": ["Sales", "Finance", "Engineering"],
+      "probability": 1.0,
+      "maxPerDay": 2,
+      "enabled": true
+    },
+    {
+      "name": "calendar-event",
+      "type": "calendar-event",
+      "peerGroups": ["Sales", "Finance", "Engineering"],
+      "probability": 0.35,
+      "maxPerDay": 1,
+      "enabled": true
+    },
+    {
+      "name": "onedrive-file",
+      "type": "onedrive-file",
+      "peerGroups": ["Sales", "Finance", "Engineering"],
+      "probability": 0.5,
+      "maxPerDay": 1,
+      "enabled": true
+    },
+    {
+      "name": "sales-mail-send",
+      "type": "mail-send",
+      "peerGroups": ["Sales"],
+      "probability": 0.5,
+      "maxPerDay": 1,
+      "enabled": true
+    },
+    {
+      "name": "finance-mail-send",
+      "type": "mail-send",
+      "peerGroups": ["Finance"],
+      "probability": 0.2,
+      "maxPerDay": 1,
+      "enabled": true
+    }
+  ]
+}
+

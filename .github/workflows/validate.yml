@@ -1,0 +1,88 @@
+name: Validate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: windows-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install PowerShell test modules
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module Pester -MinimumVersion 5.5.0 -Scope CurrentUser -Force
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+
+      - name: Parse PowerShell and validate JSON
+        shell: pwsh
+        run: |
+          $failed = $false
+          Get-ChildItem -Path . -Filter '*.ps1' -Recurse | ForEach-Object {
+            $tokens = $null
+            $errors = $null
+            [Management.Automation.Language.Parser]::ParseFile(
+              $_.FullName,
+              [ref]$tokens,
+              [ref]$errors
+            ) | Out-Null
+            if ($errors.Count) {
+              $failed = $true
+              $errors | ForEach-Object {
+                Write-Error "$($_.Extent.File):$($_.Extent.StartLineNumber): $($_.Message)"
+              }
+            }
+          }
+          Get-Content .\baseline-config.sample.json -Raw | ConvertFrom-Json | Out-Null
+          if ($failed) {
+            throw 'PowerShell parsing failed.'
+          }
+
+      - name: Run PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          $results = Invoke-ScriptAnalyzer -Path . -Recurse -Severity Error
+          $results | Format-Table -AutoSize
+          if ($results) {
+            throw 'PSScriptAnalyzer reported errors.'
+          }
+
+      - name: Run Pester
+        shell: pwsh
+        run: |
+          $configuration = New-PesterConfiguration
+          $configuration.Run.Path = '.\tests'
+          $configuration.Run.Exit = $true
+          $configuration.Output.Verbosity = 'Detailed'
+          Invoke-Pester -Configuration $configuration
+
+      - name: Check for runtime artifacts
+        shell: pwsh
+        run: |
+          $forbidden = @(
+            'baseline-config.json',
+            'baseline-run.log'
+          )
+          foreach ($name in $forbidden) {
+            if (Test-Path -LiteralPath $name) {
+              throw "Runtime artifact is committed: $name"
+            }
+          }
+          $cacheFiles = Get-ChildItem -Path . -Recurse -File |
+            Where-Object Extension -In @('.bin', '.token')
+          if ($cacheFiles) {
+            throw "Token-like cache files are committed: $($cacheFiles.FullName -join ', ')"
+          }
+

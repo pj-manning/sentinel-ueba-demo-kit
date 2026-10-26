@@ -1,0 +1,13 @@
+baseline-config.json
+baseline-run.log
+*.tmp
+*.bin
+*.token
+.env
+.env.*
+!.env.example
+state/
+tokens/
+artifacts/
+TestResults/
+

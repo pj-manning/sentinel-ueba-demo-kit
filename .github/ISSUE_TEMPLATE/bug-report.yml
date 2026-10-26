@@ -1,0 +1,60 @@
+name: Bug report
+description: Report a reproducible problem without including tenant secrets
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include passwords, tokens, device codes, token caches, real
+        customer data, or unsanitized tenant configuration.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Application setup
+        - Persona enrollment
+        - Token cache
+        - Baseline activity
+        - Scheduled task
+        - Sentinel ingestion
+        - UEBA or peer analytics
+        - Documentation
+    validations:
+      required: true
+  - type: input
+    id: powershell
+    attributes:
+      label: PowerShell version
+      placeholder: "PowerShell 7.5"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Use sanitized values.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and sanitized output
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I removed tenant IDs, UPNs, IP addresses, tokens, device codes, and customer data.
+          required: true
+
